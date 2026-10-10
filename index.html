@@ -1,1 +1,284 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <meta name="description" content="Steel Quote Pro - Steel material quoting and pricing calculator">
+  <title>Steel Quote Pro</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/ibeam.svg" type="image/svg+xml">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="icons/ibeam.svg" alt="" class="brand-icon">
+      <div>
+        <h1>STEEL QUOTE <span>PRO</span></h1>
+        <p>Material pricing and quote management</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <span class="status-indicator">● READY</span>
+      <button id="newQuoteBtn" class="btn btn-primary">+ New Quote</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="dashboard-grid">
+      <article class="stat-card">
+        <span class="stat-label">CURRENT QUOTE</span>
+        <strong id="quoteNumber">SQ-1001</strong>
+        <small>Quote reference</small>
+      </article>
+      <article class="stat-card">
+        <span class="stat-label">MATERIAL TYPES</span>
+        <strong id="materialCount">0</strong>
+        <small>Different line items</small>
+      </article>
+      <article class="stat-card">
+        <span class="stat-label">TOTAL ORDER WEIGHT</span>
+        <strong id="totalWeight">0 lb</strong>
+        <small>Combined material weight</small>
+      </article>
+      <article class="stat-card highlight-card">
+        <span class="stat-label">CUSTOMER QUOTE TOTAL</span>
+        <strong id="grandTotal">$0.00</strong>
+        <small>Including delivery</small>
+      </article>
+    </section>
+
+    <div class="workspace">
+      <section class="panel quote-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">QUOTE WORKSPACE</span>
+            <h2>Customer Information</h2>
+          </div>
+          <span class="panel-icon">01</span>
+        </div>
+
+        <div class="form-grid">
+          <label>
+            Customer / Company
+            <input id="customerName" placeholder="Enter company name">
+          </label>
+          <label>
+            Contact Name
+            <input id="contactName" placeholder="Enter contact name">
+          </label>
+          <label>
+            Customer Email
+            <input id="customerEmail" type="email" placeholder="name@company.com">
+          </label>
+          <label>
+            Quote Date
+            <input id="quoteDate" type="date">
+          </label>
+          <label class="full-width">
+            Delivery Address / Job Name
+            <input id="deliveryAddress" placeholder="Enter delivery address or job reference">
+          </label>
+          <label class="full-width">
+            Quote Notes
+            <textarea id="quoteNotes" rows="2" placeholder="Optional notes or special instructions"></textarea>
+          </label>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="panel-heading material-heading">
+          <div>
+            <span class="eyebrow">MATERIAL CONFIGURATION</span>
+            <h2>Add Material</h2>
+          </div>
+          <span class="panel-icon">02</span>
+        </div>
+
+        <div class="form-grid">
+          <label>
+            Material Type
+            <select id="materialType">
+              <option value="">Select material type</option>
+              <option value="ibeam">I-Beam / Wide Flange</option>
+              <option value="square-tube">Square Tube</option>
+              <option value="rect-tube">Rectangular Tube</option>
+              <option value="pipe">Steel Pipe</option>
+              <option value="channel">Steel Channel</option>
+              <option value="angle">Angle Iron</option>
+              <option value="round-bar">Round Bar</option>
+              <option value="flat-bar">Flat Bar</option>
+              <option value="round-tube">Round Tubing</option>
+              <option value="sheet">Sheet Metal</option>
+              <option value="plate">Steel Plate</option>
+              <option value="square-bar">Square Bar</option>
+              <option value="rebar">Rebar</option>
+              <option value="custom">Custom Profile</option>
+            </select>
+          </label>
+
+          <label>
+            Profile / Size
+            <select id="materialProfile" disabled>
+              <option value="">Select a material type first</option>
+            </select>
+          </label>
+
+          <label>
+            Description
+            <input id="materialDescription" placeholder="e.g. 4 x 4 x 1/4 tube">
+          </label>
+
+          <label>
+            Weight per Foot (lb/ft)
+            <input id="weightPerFoot" type="number" min="0" step="0.001" placeholder="Auto-filled when available">
+          </label>
+
+          <label>
+            Length per Piece (feet)
+            <input id="lengthPerPiece" type="number" min="0.001" step="0.001" value="20">
+          </label>
+
+          <label>
+            Quantity (pieces)
+            <input id="quantity" type="number" min="1" step="1" value="1">
+          </label>
+
+          <label>
+            Mill Price ($ / CWT)
+            <input id="millPrice" type="number" min="0" step="0.01" placeholder="Enter mill price">
+          </label>
+
+          <label>
+            Line Reference
+            <input id="lineReference" placeholder="Optional item number">
+          </label>
+        </div>
+
+        <div class="material-preview">
+          <div>
+            <span>Weight per piece</span>
+            <strong id="previewPieceWeight">0 lb</strong>
+          </div>
+          <div>
+            <span>Total line weight</span>
+            <strong id="previewTotalWeight">0 lb</strong>
+          </div>
+          <div>
+            <span>Estimated line total</span>
+            <strong id="previewLineTotal">$0.00</strong>
+          </div>
+        </div>
+
+        <div class="button-row">
+          <button id="addMaterialBtn" class="btn btn-primary">+ Add Material to Quote</button>
+          <button id="clearMaterialBtn" class="btn btn-secondary">Clear Fields</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">QUOTE CONTENTS</span>
+            <h2>Material Line Items</h2>
+          </div>
+          <span id="lineCountBadge" class="count-badge">0 lines</span>
+        </div>
+
+        <div id="quoteLines" class="quote-lines">
+          <div class="empty-state">
+            <div class="empty-icon">＋</div>
+            <h3>No materials added yet</h3>
+            <p>Select a profile, enter pricing and quantity, then add it to this quote.</p>
+          </div>
+        </div>
+      </section>
+
+      <aside class="sidebar">
+        <section class="panel">
+          <div class="panel-heading">
+            <div>
+              <span class="eyebrow">PRICING CONTROLS</span>
+              <h2>Quote Settings</h2>
+            </div>
+          </div>
+
+          <label class="setting-label" for="markupRate">
+            Material Upcharge
+            <strong id="markupValue">6%</strong>
+          </label>
+          <input id="markupRate" type="range" min="0" max="30" step="0.5" value="6">
+          <div class="range-labels"><span>0%</span><span>15%</span><span>30%</span></div>
+
+          <label class="setting-label" for="deliveryRate">
+            Delivery Rate ($ per lb)
+          </label>
+          <input id="deliveryRate" type="number" min="0" step="0.001" value="0.02">
+
+          <label class="setting-label" for="deliveryOverride">
+            Delivery Charge Override ($)
+          </label>
+          <input id="deliveryOverride" type="number" min="0" step="0.01" placeholder="Leave blank for automatic calculation">
+
+          <p class="helper-text">An optional delivery override replaces the calculated delivery charge for this quote.</p>
+
+          <div class="divider"></div>
+
+          <div class="summary-row">
+            <span>Material subtotal</span>
+            <strong id="materialSubtotal">$0.00</strong>
+          </div>
+          <div class="summary-row">
+            <span>Delivery</span>
+            <strong id="deliveryTotal">$0.00</strong>
+          </div>
+          <div class="summary-row total-row">
+            <span>Customer total</span>
+            <strong id="sidebarGrandTotal">$0.00</strong>
+          </div>
+
+          <button id="printQuoteBtn" class="btn btn-primary btn-block">Print / Save PDF</button>
+          <button id="copyQuoteBtn" class="btn btn-secondary btn-block">Copy Customer Quote</button>
+          <button id="saveQuoteBtn" class="btn btn-secondary btn-block">Save Quote</button>
+        </section>
+
+        <section class="panel saved-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="eyebrow">LOCAL STORAGE</span>
+              <h2>Saved Quotes</h2>
+            </div>
+          </div>
+          <label>
+            Select a saved quote
+            <select id="savedQuotesSelect">
+              <option value="">No saved quotes</option>
+            </select>
+          </label>
+          <div class="button-row stacked">
+            <button id="loadQuoteBtn" class="btn btn-secondary">Open Quote</button>
+            <button id="deleteQuoteBtn" class="btn btn-danger">Delete Quote</button>
+          </div>
+          <p class="helper-text">Quotes are stored in this browser on this device.</p>
+        </section>
+
+        <section class="panel tip-panel">
+          <h3>Steel Quote Pro</h3>
+          <p>Build multi-material quotes, review line items, and prepare customer-facing pricing in one workspace.</p>
+        </section>
+      </aside>
+    </div>
+
+    <footer>
+      <span>STEEL QUOTE PRO</span>
+      <span>Verify material weights, mill pricing and delivery terms before submitting a quote.</span>
+    </footer>
+  </main>
+
+  <div id="messageToast" class="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
