@@ -1,0 +1,21 @@
+
+{
+  "id": "./",
+  "name": "Steel Quote Pro",
+  "short_name": "Steel Quote",
+  "description": "Steel material quoting and pricing calculator",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#edf1f6",
+  "theme_color": "#101827",
+  "icons": [
+    {
+      "src": "icons/ibeam.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
